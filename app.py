@@ -19,10 +19,6 @@ app.config["MONGO_URI"] = "mongodb://localhost:27017/Users"
 
 mongo = PyMongo(app)
 
-@app.route("/hello")
-def hello():
-    return "route is working"
-
 @app.route("/add", methods=["POST"])
 def add_user():
     json = request.json
@@ -41,14 +37,14 @@ def add_user():
         return not_found()
 
 # Route for findng all records
-@app.route("/users")
+@app.route("/users", methods = ['GET'])
 def users():
     users = mongo.db.user.find()
     resp = dumps(users)
     return resp
 
 # route for finding a specific record
-@app.route("/users/<id>")
+@app.route("/users/<id>", methods = ['GET'])
 def user(id):
     user = mongo.db.user.find_one({'_id': ObjectId(id)})
     resp = dumps(user)
@@ -97,4 +93,5 @@ def not_found(error = None):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
